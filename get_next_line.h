@@ -6,7 +6,7 @@
 /*   By: dbatista <dbatista@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 22:57:16 by dbatista          #+#    #+#             */
-/*   Updated: 2024/10/21 23:20:53 by dbatista         ###   ########.fr       */
+/*   Updated: 2024/10/22 09:28:17 by dbatista         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+
+#ifndef BUFFER_SIZE
+# define BUFFER_SIZE 42
+#endif
 
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
