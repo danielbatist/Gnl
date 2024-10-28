@@ -1,3 +1,4 @@
-hello world
+hello world hello world hello
 teste da get next line
+teste de quebra de linha
 finish da get next line

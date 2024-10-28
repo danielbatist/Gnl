@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbatista <dbatista@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbatista <dbatista@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 22:57:13 by dbatista          #+#    #+#             */
-/*   Updated: 2024/10/22 22:30:07 by dbatista         ###   ########.fr       */
+/*   Updated: 2024/10/27 00:33:15 by dbatista         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
 
 static	void	*ft_free_mem(char **line_f, char **rest_f, char **buf_f)
 {
@@ -33,6 +32,7 @@ static	void	*ft_free_mem(char **line_f, char **rest_f, char **buf_f)
 			free(*buf_f);
 		*buf_f = NULL;
 	}
+	return (NULL);
 }
 
 static	char	*ft_after_break_line(char *line)
@@ -41,7 +41,7 @@ static	char	*ft_after_break_line(char *line)
 	size_t	size;
 	int		pos;
 
-	pos = ft_pos_break_line(line);
+	pos = ft_strchr(line);
 	if (pos < 0)
 		return (NULL);
 	size = ft_strlen(line);
@@ -55,7 +55,21 @@ static	char	*ft_after_break_line(char *line)
 
 static	char	*ft_before_break_line(char *line)
 {
+	int		pos;
+	char	*before_line;
 
+	pos = ft_strchr(line);
+	if (!line)
+		return (NULL);
+	if (pos < 0)
+		return (line);
+	before_line = malloc((pos + 2) * sizeof(char));
+	if (before_line == NULL)
+		return (NULL);
+	before_line[pos + 1] = '\0';
+	ft_strlcpy(before_line, line, pos + 2);
+	free(line);
+	return (before_line);
 }
 
 static	char	*ft_get_line(char **r_line, char **buf, char **line, int buf_r)
@@ -87,11 +101,9 @@ char	*get_next_line(int fd)
 	if (!buf)
 		return (NULL);
 	buf_read = BUFFER_SIZE;
-
-	while (buf_read == BUFFER_SIZE && ft_line_break(line) < 0)
+	while (buf_read == BUFFER_SIZE && ft_strchr(line) < 0)
 	{
 		buf_read = read(fd, buf, BUFFER_SIZE);
-
 		if (buf_read < 0)
 			return (ft_free_mem(&line, &rest_line, &buf));
 		buf[buf_read] = '\0';
@@ -105,10 +117,19 @@ char	*get_next_line(int fd)
 
 int	main(void)
 {
-	int	fd = open(gnl.txt, O_RDONLY);
-		if(fd == -1)
-		{
-			printf("ERROR!");
-			return (1);
-		}
+	int	fd = open("gnl.txt", O_RDONLY);
+	char	*line;
+
+	if(fd == -1)
+	{
+		printf("ERROR!");
+		return (1);
+	}
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s", line);
+		free(line);
+	}
+	close(fd);
+	return (0);
 }*/
